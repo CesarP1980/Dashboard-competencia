@@ -605,8 +605,9 @@ async function checkLogin() {
   if (!val) { err.innerHTML = '⚠️ Ingrese la clave'; return; }
   const h = await hashString(val);
   if (h === ACCESS_HASH) {
-    document.getElementById('login-screen').style.display = 'none';
     sessionStorage.setItem('auth', '1');
+    document.getElementById('login-screen').style.display = 'none';
+    tryAutoLoad();
   } else {
     err.innerHTML = '⛔ Clave incorrecta';
     document.getElementById('login-input').value = '';
@@ -614,10 +615,11 @@ async function checkLogin() {
   }
 }
 
-// Check session on load
+// Check session on load — already authenticated
 if (sessionStorage.getItem('auth') === '1') {
   document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('login-screen').style.display = 'none';
+    tryAutoLoad();
   });
 }
 </script>
@@ -731,18 +733,18 @@ fileInput.addEventListener('change', e => processFile(e.target.files[0]));
 
 // ── AUTO-LOAD from JSON files (SharePoint) ───────────────────
 const DATA_URLS = {
-  ventas:     'https://profermacoec-my.sharepoint.com/personal/cparedes_profermaco_com_ec/_layouts/15/download.aspx?SourceUrl=%2Fpersonal%2Fcparedes_profermaco_com_ec%2FDocuments%2FProfermaco%2F2026%2FCredito%2FDashboard%2Fventas.json',
-  rucs:       'https://profermacoec-my.sharepoint.com/personal/cparedes_profermaco_com_ec/_layouts/15/download.aspx?SourceUrl=%2Fpersonal%2Fcparedes_profermaco_com_ec%2FDocuments%2FProfermaco%2F2026%2FCredito%2FDashboard%2Frucs.json',
-  profermaco: 'https://profermacoec-my.sharepoint.com/personal/cparedes_profermaco_com_ec/_layouts/15/download.aspx?SourceUrl=%2Fpersonal%2Fcparedes_profermaco_com_ec%2FDocuments%2FProfermaco%2F2026%2FCredito%2FDashboard%2Fprofermaco.json'
+  ventas:     'ventas.json',
+  rucs:       'rucs.json',
+  profermaco: 'profermaco.json'
 };
 
 async function tryAutoLoad() {
   try {
     showLoading('Cargando datos actualizados…');
     const [vRes, rRes, pRes] = await Promise.all([
-      fetch(DATA_URLS.ventas,     {credentials: 'include'}),
-      fetch(DATA_URLS.rucs,       {credentials: 'include'}),
-      fetch(DATA_URLS.profermaco, {credentials: 'include'})
+      fetch(DATA_URLS.ventas),
+      fetch(DATA_URLS.rucs),
+      fetch(DATA_URLS.profermaco)
     ]);
     if (!vRes.ok || !rRes.ok || !pRes.ok) throw new Error('Archivos no encontrados');
 
@@ -787,10 +789,7 @@ async function tryAutoLoad() {
   }
 }
 
-// Try auto-load on page start
-window.addEventListener('DOMContentLoaded', () => {
-  tryAutoLoad();
-});
+// Auto-load is triggered after login — see checkLogin()
 
 function showLoading(text) {
   const el = document.getElementById('loading-overlay');
