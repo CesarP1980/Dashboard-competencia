@@ -9,28 +9,29 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0b0e14;
-    --surface: #131720;
-    --surface2: #1a2030;
-    --border: #252d3d;
-    --accent: #4f8ef7;
+    --bg: #0d1b2a;
+    --surface: #112236;
+    --surface2: #163045;
+    --border: #1e3a52;
+    --accent: #c9a84c;
     --accent2: #e85d75;
     --accent3: #34d399;
-    --accent4: #f59e0b;
-    --text: #e4e8f0;
-    --text-muted: #6b7a99;
-    --trj: #4f8ef7;
-    --kw: #e85d75;
-    --frm: #34d399;
+    --accent4: #c9a84c;
+    --text: #e8eef4;
+    --text-muted: #7a9bb5;
+    --trj: #4a7c4e;
+    --kw: #5bb8d4;
+    --frm: #a8d5b5;
     --radius: 12px;
-    --shadow: 0 4px 24px rgba(0,0,0,0.4);
+    --shadow: 0 4px 32px rgba(0,0,0,0.5);
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
     font-family: 'DM Sans', sans-serif;
-    background: var(--bg);
+    background: linear-gradient(160deg, #0d1b2a 0%, #112236 40%, #0a1828 100%);
+    background-attachment: fixed;
     color: var(--text);
     min-height: 100vh;
     font-size: 14px;
@@ -102,10 +103,13 @@
   .topbar {
     display: flex; align-items: center; justify-content: space-between;
     padding: 1rem 2rem; border-bottom: 1px solid var(--border);
-    background: var(--surface); position: sticky; top: 0; z-index: 100;
+    background: rgba(17,34,54,0.95);
+    backdrop-filter: blur(12px);
+    position: sticky; top: 0; z-index: 100;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.3);
   }
   .topbar-brand { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 800; letter-spacing: -0.5px; }
-  .topbar-brand span { color: var(--accent); }
+  .topbar-brand span { background: linear-gradient(135deg, #c9a84c, #e8c96a); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
   .topbar-right { display: flex; align-items: center; gap: 1rem; }
   .reload-btn {
     background: var(--surface2); border: 1px solid var(--border);
@@ -280,9 +284,11 @@
     font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 800;
     letter-spacing: .5px;
   }
-  .provider-block-name.trj { color: var(--trj); }
-  .provider-block-name.kw  { color: var(--kw); }
-  .provider-block-name.frm { color: var(--frm); }
+  .provider-block-name.trj { color: #5a9e60; font-weight: 800; }
+  .provider-block-name.kw  { color: #5bb8d4; font-weight: 800; }
+  .provider-block-name.frm { color: #a8d5b5; font-weight: 800; }
+  .provider-block-name.frm .frm-f { color: #ffffff; }
+  .provider-block-name.frm .frm-rm { color: #a8d5b5; }
   .provider-block-summary {
     display: flex; flex-wrap: wrap; gap: .5rem 1.5rem;
     margin-left: auto; align-items: center;
@@ -310,19 +316,33 @@
   .kpi-card::before {
     content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
   }
-  .kpi-card.trj::before { background: var(--trj); }
-  .kpi-card.kw::before  { background: var(--kw); }
-  .kpi-card.frm::before { background: var(--frm); }
+  .kpi-card.trj::before { background: linear-gradient(90deg, #3d6b41, #5a9e60); }
+  .kpi-card.kw::before  { background: linear-gradient(90deg, #3a9ab8, #5bb8d4); }
+  .kpi-card.frm::before { background: linear-gradient(90deg, #6aad85, #a8d5b5); }
   .kpi-label { color: var(--text-muted); font-size: .75rem; margin-bottom: .3rem; }
   .kpi-value { font-family: 'Syne', sans-serif; font-size: 1.2rem; font-weight: 700; }
   .kpi-sub { color: var(--text-muted); font-size: .72rem; margin-top: .2rem; }
 
   /* ── CHART PANEL ── */
   .chart-panel {
-    padding: 1.25rem 1.5rem; display: flex; flex-direction: column;
+    padding: 0; display: flex; flex-direction: column;
     border-bottom: 1px solid var(--border);
   }
-  .chart-panel-title { font-size: .78rem; font-weight: 600; color: var(--text-muted); margin-bottom: .75rem; text-transform: uppercase; letter-spacing: .5px; }
+  .chart-panel-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: .85rem 1.5rem; cursor: pointer; user-select: none;
+    transition: background .15s;
+  }
+  .chart-panel-header:hover { background: rgba(255,255,255,.03); }
+  .chart-panel-title {
+    font-size: .78rem; font-weight: 700; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: .5px;
+    display: flex; align-items: center; gap: .5rem;
+  }
+  .chart-toggle-icon { font-size: .7rem; color: var(--text-muted); transition: transform .25s; }
+  .chart-panel.collapsed .chart-toggle-icon { transform: rotate(-90deg); }
+  .chart-panel-body { padding: .25rem 1.5rem 1.25rem; overflow: hidden; transition: max-height .3s ease; }
+  .chart-panel.collapsed .chart-panel-body { display: none; }
   canvas { max-height: 200px; }
 
   /* ── DETAIL TABLE ── */
@@ -343,9 +363,9 @@
   .provider-dot {
     display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: .5rem;
   }
-  .dot-trj { background: var(--trj); }
-  .dot-kw  { background: var(--kw); }
-  .dot-frm { background: var(--frm); }
+  .dot-trj { background: #5a9e60; }
+  .dot-kw  { background: #5bb8d4; }
+  .dot-frm { background: #a8d5b5; }
 
   .empty-state {
     text-align: center; padding: 4rem 2rem; color: var(--text-muted);
@@ -487,6 +507,65 @@
     display: flex; align-items: center; gap: .5rem;
   }
 
+
+  /* ── LOGIN SCREEN ── */
+  #login-screen {
+    position: fixed; inset: 0; z-index: 99999;
+    background: radial-gradient(ellipse at 30% 50%, #1a2540 0%, #0b0e14 70%);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 2rem;
+  }
+  .login-logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.4rem; font-weight: 800; letter-spacing: -1px;
+    background: linear-gradient(135deg, #4f8ef7, #34d399);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    margin-bottom: .4rem;
+  }
+  .login-sub {
+    color: #6b7a99; font-size: .95rem; margin-bottom: 2.5rem;
+    font-weight: 300; letter-spacing: .5px;
+  }
+  .login-box {
+    background: #131720; border: 1px solid #252d3d;
+    border-radius: 16px; padding: 2.5rem 2.5rem;
+    width: 100%; max-width: 380px;
+    box-shadow: 0 8px 40px rgba(0,0,0,.5);
+  }
+  .login-box-title {
+    font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700;
+    color: #e4e8f0; margin-bottom: 1.5rem; text-align: center;
+  }
+  .login-field { position: relative; margin-bottom: 1rem; }
+  .login-field input {
+    width: 100%; background: #0b0e14; border: 1px solid #252d3d;
+    color: #e4e8f0; padding: .75rem 1rem .75rem 2.8rem;
+    border-radius: 8px; font-family: 'DM Sans', sans-serif;
+    font-size: .95rem; transition: border-color .2s; outline: none;
+  }
+  .login-field input:focus { border-color: #4f8ef7; }
+  .login-field-icon {
+    position: absolute; left: .9rem; top: 50%;
+    transform: translateY(-50%); font-size: 1rem; color: #6b7a99;
+  }
+  .login-btn {
+    width: 100%; background: linear-gradient(135deg, #4f8ef7, #3a7be0);
+    color: #fff; border: none; padding: .8rem;
+    border-radius: 8px; font-family: 'DM Sans', sans-serif;
+    font-size: .95rem; font-weight: 600; cursor: pointer;
+    transition: opacity .2s; margin-top: .5rem;
+  }
+  .login-btn:hover { opacity: .88; }
+  .login-error {
+    color: #e85d75; font-size: .82rem; text-align: center;
+    margin-top: .75rem; min-height: 1.2rem;
+    display: flex; align-items: center; justify-content: center; gap: .4rem;
+  }
+  .login-footer {
+    margin-top: 2rem; color: #6b7a99; font-size: .75rem; text-align: center;
+  }
+
   /* scrollbar */
   ::-webkit-scrollbar { width: 6px; height: 6px; }
   ::-webkit-scrollbar-track { background: var(--bg); }
@@ -494,6 +573,55 @@
 </style>
 </head>
 <body>
+
+<!-- LOGIN SCREEN -->
+<div id="login-screen">
+  <div class="login-logo">Profermaco</div>
+  <div class="login-sub">Dashboard · Inteligencia Competitiva</div>
+  <div class="login-box">
+    <div class="login-box-title">🔐 Acceso restringido</div>
+    <div class="login-field">
+      <span class="login-field-icon">🔑</span>
+      <input type="password" id="login-input" placeholder="Ingrese la clave de acceso"
+        onkeydown="if(event.key==='Enter') checkLogin()">
+    </div>
+    <button class="login-btn" onclick="checkLogin()">Ingresar</button>
+    <div class="login-error" id="login-error"></div>
+  </div>
+  <div class="login-footer">Profermaco © 2026 · Solo para uso interno</div>
+</div>
+
+<script>
+const ACCESS_HASH = 'dade5ed88268b2a343c7d84d7ff84b512619eb47372e040c5c8a441308e4ff90';
+
+async function hashString(str) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+async function checkLogin() {
+  const val = document.getElementById('login-input').value;
+  const err = document.getElementById('login-error');
+  if (!val) { err.innerHTML = '⚠️ Ingrese la clave'; return; }
+  const h = await hashString(val);
+  if (h === ACCESS_HASH) {
+    document.getElementById('login-screen').style.display = 'none';
+    sessionStorage.setItem('auth', '1');
+  } else {
+    err.innerHTML = '⛔ Clave incorrecta';
+    document.getElementById('login-input').value = '';
+    document.getElementById('login-input').focus();
+  }
+}
+
+// Check session on load
+if (sessionStorage.getItem('auth') === '1') {
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('login-screen').style.display = 'none';
+  });
+}
+</script>
+
 
 <!-- UPLOAD SCREEN -->
 <div id="upload-screen">
@@ -601,14 +729,20 @@ dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag'));
 dropZone.addEventListener('drop', e => { e.preventDefault(); dropZone.classList.remove('drag'); processFile(e.dataTransfer.files[0]); });
 fileInput.addEventListener('change', e => processFile(e.target.files[0]));
 
-// ── AUTO-LOAD from JSON files (GitHub Pages) ─────────────────
+// ── AUTO-LOAD from JSON files (SharePoint) ───────────────────
+const DATA_URLS = {
+  ventas:     'https://profermacoec-my.sharepoint.com/personal/cparedes_profermaco_com_ec/_layouts/15/download.aspx?SourceUrl=%2Fpersonal%2Fcparedes_profermaco_com_ec%2FDocuments%2FProfermaco%2F2026%2FCredito%2FDashboard%2Fventas.json',
+  rucs:       'https://profermacoec-my.sharepoint.com/personal/cparedes_profermaco_com_ec/_layouts/15/download.aspx?SourceUrl=%2Fpersonal%2Fcparedes_profermaco_com_ec%2FDocuments%2FProfermaco%2F2026%2FCredito%2FDashboard%2Frucs.json',
+  profermaco: 'https://profermacoec-my.sharepoint.com/personal/cparedes_profermaco_com_ec/_layouts/15/download.aspx?SourceUrl=%2Fpersonal%2Fcparedes_profermaco_com_ec%2FDocuments%2FProfermaco%2F2026%2FCredito%2FDashboard%2Fprofermaco.json'
+};
+
 async function tryAutoLoad() {
   try {
     showLoading('Cargando datos actualizados…');
     const [vRes, rRes, pRes] = await Promise.all([
-      fetch('ventas.json'),
-      fetch('rucs.json'),
-      fetch('profermaco.json')
+      fetch(DATA_URLS.ventas,     {credentials: 'include'}),
+      fetch(DATA_URLS.rucs,       {credentials: 'include'}),
+      fetch(DATA_URLS.profermaco, {credentials: 'include'})
     ]);
     if (!vRes.ok || !rRes.ok || !pRes.ok) throw new Error('Archivos no encontrados');
 
@@ -844,6 +978,23 @@ function seniorAnalysis(ruc, rows, prof) {
   }
   const slopePct = avgComp > 0 ? Math.round((slope/avgComp)*100) : 0;
   const trendLabel = slopePct > 10 ? 'creciente 📈' : slopePct < -10 ? 'decreciente 📉' : 'estable ➡️';
+  const freqLabel  = freqPct >= 70 ? 'constante' : freqPct >= 40 ? 'irregular' : 'esporádica';
+
+  // ── Best / worst provider by average ──
+  const byProvMap = {};
+  rows.forEach(r => {
+    if (!byProvMap[r.proveedor]) byProvMap[r.proveedor] = {total:0, freq:0};
+    byProvMap[r.proveedor].total += r.venta;
+    byProvMap[r.proveedor].freq  += 1;
+  });
+  const provRanked = Object.entries(byProvMap)
+    .map(([p,d]) => ({p, avg: Math.round(d.total/d.freq), freq: d.freq}))
+    .sort((a,b) => b.avg - a.avg);
+  const bestProv  = provRanked[0];
+  const worstProv = provRanked.length > 1 ? provRanked[provRanked.length-1] : null;
+  const freqAnalysis = `Compra de forma <strong>${freqLabel}</strong> (${freqComp} de ${possible} meses, ${freqPct}% de presencia), tendencia <strong>${trendLabel}</strong>.`
+    + (bestProv  ? ` Mayor relación con <strong>${bestProv.p}</strong> (prom. ${fmt(bestProv.avg)}/mes, ${bestProv.freq} meses).` : '')
+    + (worstProv ? ` Menor actividad con <strong>${worstProv.p}</strong> (prom. ${fmt(worstProv.avg)}/mes).` : '');
 
   // ── Filtro comercial inicial ──
   const bajoPotencial = avgComp < 500 || freqComp < 4;
@@ -880,6 +1031,7 @@ function seniorAnalysis(ruc, rows, prof) {
     return { vClass, vIcon, vLabel, esCliente: false,
       rows: [
         { icon:'📊', text:`<strong>Potencial comercial:</strong> ${potencial} — Compra ${fmt(totalComp)} total en ${freqComp} meses (${freqPct}% de presencia). Proveedores: ${provActivos.join(', ')}.` },
+        { icon:'🗓️', text:`<strong>Frecuencia y tendencia:</strong> ${freqAnalysis}` },
         { icon:'📈', text:`<strong>Comportamiento:</strong> Tendencia ${trendLabel}. Promedio ${fmt(avgComp)}/mes. Concentración principal en ${topProv?topProv[0]:'—'} (${topProvPct}% del gasto).` },
         { icon:'💬', text:`<strong>¿Conviene incorporarlo?</strong> ${conviene}` },
         { icon:'🎯', text:`<strong>Acción crediticia:</strong> ${accionCrediticia}` },
@@ -931,6 +1083,7 @@ function seniorAnalysis(ruc, rows, prof) {
   return { vClass, vIcon, vLabel, esCliente: true, sow, sowLabel, sowClass, sowBarWidth,
     rows: [
       { icon:'🏦', text:`<strong>Share of Wallet:</strong> <span style="${sowClass};font-weight:700">${sow}%</span> — ${sowLabel}. Nuestro promedio: ${fmt(promNuestro)}/mes vs competencia: ${fmt(avgComp)}/mes.` },
+      { icon:'🗓️', text:`<strong>Frecuencia y tendencia:</strong> ${freqAnalysis}` },
       { icon:'📈', text:`<strong>Comportamiento con competencia:</strong> Tendencia ${trendLabel}. Activo en ${freqComp} de ${possible} meses posibles (${freqPct}%). Proveedores: ${provActivos.join(', ')}.` },
       { icon:'💰', text:`<strong>Potencial de mercado estimado:</strong> ${fmt(potencialTotal)} total. Gap mensual no capturado: ${fmt(gapMensual)}/mes. Cupo actual: ${fmt(cupo)}.` },
       { icon:'🎯', text:`<strong>Acción sobre cupo:</strong> ${accionCupo}` },
@@ -1505,7 +1658,7 @@ function renderProviderBlocks(rows) {
     block.innerHTML = `
       <div class="provider-block-header" onclick="toggleBlock('${prov}')">
         <div class="provider-color-bar" style="background:${color};"></div>
-        <div class="provider-block-name ${cls}">${prov}</div>
+        <div class="provider-block-name ${cls}">${prov === 'FRM' ? '<span class="frm-f">F</span><span class="frm-rm">RM</span>' : prov}</div>
         <div class="provider-block-summary">
           <div class="pb-summary-item">Total: <strong>${fmt(total)}</strong></div>
           <div class="pb-summary-item">Frecuencia: <strong>${freq} meses</strong></div>
@@ -1541,9 +1694,14 @@ function renderProviderBlocks(rows) {
             </div>
           </div>
         </div>
-        <div class="chart-panel">
-          <div class="chart-panel-title">Venta Estimada por Mes</div>
-          <canvas id="${canvasId}"></canvas>
+        <div class="chart-panel" id="chart-panel-${prov}">
+          <div class="chart-panel-header" onclick="toggleChartPanel('${prov}')">
+            <div class="chart-panel-title">📊 Ventas por Mes</div>
+            <span class="chart-toggle-icon">▼</span>
+          </div>
+          <div class="chart-panel-body">
+            <canvas id="${canvasId}"></canvas>
+          </div>
         </div>
         <div class="detail-panel">
           <div class="detail-panel-title">Detalle por Mes</div>
@@ -1605,6 +1763,11 @@ function renderProviderBlocks(rows) {
 function toggleBlock(prov) {
   const block = document.getElementById(`block-${prov}`);
   block.classList.toggle('collapsed');
+}
+
+function toggleChartPanel(prov) {
+  const panel = document.getElementById(`chart-panel-${prov}`);
+  panel.classList.toggle('collapsed');
 }
 
 // ── HELPERS ──────────────────────────────────────────────────
