@@ -771,7 +771,7 @@ async function tryAutoLoad() {
 
     profermaco = {};
     profData.forEach(r => {
-      const ruc = String(r.RUC || '').trim().replace(/\.0$/, '');
+      const ruc = String(r.RUC || '').trim().replace(/\.0$/, '').padStart(13, '0');
       if (ruc) profermaco[ruc] = r;
     });
 
@@ -827,7 +827,7 @@ async function processFile(file) {
       if (profSheet) {
         const profRows = XLSX.utils.sheet_to_json(profSheet, { defval: '' });
         profRows.forEach(row => {
-          const ruc = String(row['RUC'] || '').trim().replace(/\.0$/, '');
+          const ruc = String(row['RUC'] || '').trim().replace(/\.0$/, '').padStart(13, '0');
           if (ruc) profermaco[ruc] = row;
         });
       }
@@ -844,7 +844,7 @@ async function processFile(file) {
         if (!sheet) continue;
         const rows = XLSX.utils.sheet_to_json(sheet, { defval: '' });
         rows.forEach(row => {
-          const ruc = String(row['RUC'] || '').trim().replace(/\.0$/, '');
+          const ruc = String(row['RUC'] || '').trim().replace(/\.0$/, '').padStart(13, '0');
           const venta = parseFloat(row['Venta estimada']) || 0;
           const mes = parseInt(row['MES']) || 0;
           const año = parseInt(row['año']) || 0;
@@ -884,14 +884,17 @@ function setupSearch() {
   const list = document.getElementById('autocomplete-list');
 
   input.addEventListener('input', () => {
-    const q = input.value.trim().toLowerCase();
+    const raw = input.value.trim();
+    const q = raw.toLowerCase();
     if (q.length < 2) { list.style.display = 'none'; return; }
+    // Also search padded version if numeric
+    const qPadded = /^\d+$/.test(raw) ? raw.padStart(13,'0') : null;
 
     const matches = [];
     const seen = new Set();
     for (const [ruc, name] of Object.entries(rucNames)) {
       if (seen.size >= 40) break;
-      if (ruc.includes(q) || name.toLowerCase().includes(q)) {
+      if (ruc.includes(q) || (qPadded && ruc.includes(qPadded)) || name.toLowerCase().includes(q)) {
         matches.push({ ruc, name }); seen.add(ruc);
       }
     }
