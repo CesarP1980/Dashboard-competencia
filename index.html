@@ -293,9 +293,9 @@
   }
   .provider-block-name.trj { color: #2D6A4F; font-weight: 800; font-size: 1.1rem; }
   .provider-block-name.kw  { color: #1D6FA4; font-weight: 800; font-size: 1.1rem; }
-  .provider-block-name.frm { color: #2E7D52; font-weight: 800; font-size: 1.1rem; }
-  .provider-block-name.frm .frm-f { color: #ffffff; }
-  .provider-block-name.frm .frm-rm { color: #a8d5b5; }
+  .provider-block-name.frm { font-weight: 800; font-size: 1.1rem; }
+  .frm-f { color: #1E3A8A; font-weight: 800; }
+  .frm-rm { color: #14B8A6; font-weight: 800; }
   .provider-block-summary {
     display: flex; flex-wrap: wrap; gap: .5rem 1.5rem;
     margin-left: auto; align-items: center;
@@ -814,7 +814,7 @@ async function tryAutoLoad() {
 
 function showLoading(text) {
   const el = document.getElementById('loading-overlay');
-  document.getElementById('loading-text').textContent = text;
+  document.getElementById('loading-text').innerHTML = styleFRM(escapeH(text));
   el.style.display = 'flex';
 }
 function hideLoading() {
@@ -936,6 +936,7 @@ function setupSearch() {
 }
 
 function escapeH(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function styleFRM(s) { return String(s).replace(/FRM/g, '<span class="frm-f">F</span><span class="frm-rm">RM</span>'); }
 function escapeQ(s) { return s.replace(/'/g,"\\'"); }
 
 function selectRUC(ruc, name) {
@@ -1369,10 +1370,10 @@ function renderAnalysis(el, result) {
       <span class="verdict-label">${result.vLabel}</span>
     </div>
     <div class="analysis-lines">
-      <div class="analysis-line"><span class="analysis-line-icon">🗓️</span><span>${escapeH(result.patron)}</span></div>
-      <div class="analysis-line"><span class="analysis-line-icon">${result.trendIcon}</span><span>${escapeH(result.trendDesc)}</span></div>
-      <div class="analysis-line"><span class="analysis-line-icon">💡</span><span>${escapeH(result.argumento)}</span></div>
-      <div class="analysis-line"><span class="analysis-line-icon">🎯</span><span>${escapeH(result.accion)}</span></div>
+      <div class="analysis-line"><span class="analysis-line-icon">🗓️</span><span>${styleFRM(escapeH(result.patron))}</span></div>
+      <div class="analysis-line"><span class="analysis-line-icon">${result.trendIcon}</span><span>${styleFRM(escapeH(result.trendDesc))}</span></div>
+      <div class="analysis-line"><span class="analysis-line-icon">💡</span><span>${styleFRM(escapeH(result.argumento))}</span></div>
+      <div class="analysis-line"><span class="analysis-line-icon">🎯</span><span>${styleFRM(escapeH(result.accion))}</span></div>
     </div>`;
 }
 
@@ -1633,7 +1634,7 @@ function renderTotalSummary(rows) {
     <div class="total-divider"></div>
     <div>
       <div class="total-label">Proveedores activos</div>
-      <div class="total-value">${provs.length > 0 ? provs.map(p => `<span style="color:var(--${p.toLowerCase()})">${p}</span>`).join(' · ') : '—'}</div>
+      <div class="total-value">${provs.length > 0 ? provs.map(p => `<span style="color:var(--${p.toLowerCase()})">${styleFRM(p)}</span>`).join(' · ') : '—'}</div>
     </div>`;
 }
 
@@ -1681,7 +1682,7 @@ function renderProviderBlocks(rows) {
     block.innerHTML = `
       <div class="provider-block-header" onclick="toggleBlock('${prov}')">
         <div class="provider-color-bar" style="background:${color};"></div>
-        <div class="provider-block-name ${cls}">${prov === 'FRM' ? '<span class="frm-f">F</span><span class="frm-rm">RM</span>' : prov}</div>
+        <div class="provider-block-name ${cls}">${styleFRM(prov)}</div>
         <div class="provider-block-summary">
           <div class="pb-summary-item">Total: <strong>${fmt(total)}</strong></div>
           <div class="pb-summary-item">Frecuencia: <strong>${freq} meses</strong></div>
